@@ -164,5 +164,4 @@ To join the team working on Flutter, see our [contributor guide](CONTRIBUTING.md
 [Build status]: https://cirrus-ci.com/github/flutter/flutter/master
 [flutter.io]: https://flutter.io
 [Flutter logo]: https://github.com/dart-lang/site-shared/blob/master/src/_assets/image/flutter/icon/64.png?raw=1
-[Gitter Channel]: https://badges.gitter.im/flutter/flutter.svg
-[Gitter badge]: https://gitter.im/flutter/flutter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+
