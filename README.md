@@ -26,8 +26,6 @@ Flutter is Google’s mobile app SDK for crafting high-quality native interfaces
 * [Install](https://flutter.io/get-started/install/)
 * [Get started](https://flutter.io/get-started/)
 * [API documentation](https://docs.flutter.io/)
-* [Changelog](https://github.com/flutter/flutter/wiki/Changelog)
-* [How to contribute](https://github.com/flutter/flutter/blob/master/CONTRIBUTING.md)
 
 For announcements about new releases and breaking changes, follow the
 [flutter-announce@googlegroups.com](https://groups.google.com/forum/#!forum/flutter-announce)
