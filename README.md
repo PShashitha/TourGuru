@@ -153,10 +153,6 @@ Learn more about what makes Flutter special in the
 Join us in our [Gitter chat room](https://gitter.im/flutter/flutter) or join our public mailing list,
 [flutter-dev@googlegroups.com](https://groups.google.com/forum/#!forum/flutter-dev).
 
-# How to contribute
-
-To join the team working on Flutter, see our [contributor guide](CONTRIBUTING.md).
-
 [Build Status - Cirrus]: https://api.cirrus-ci.com/github/flutter/flutter.svg
 [Build status]: https://cirrus-ci.com/github/flutter/flutter/master
 [flutter.io]: https://flutter.io
