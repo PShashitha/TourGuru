@@ -16,9 +16,6 @@ samples, guidance on mobile development, and a full API reference.
 
 # Flutter ![Flutter logo][]
 
-[![Gitter Channel][]][Gitter badge]
-[![Build Status - Cirrus][]][Build status]
-
 # Build beautiful native apps in record time
 
 Flutter is Google’s mobile app SDK for crafting high-quality native interfaces on iOS and Android in record time. Flutter works with existing code, is used by developers and organizations around the world, and is free and open source.
