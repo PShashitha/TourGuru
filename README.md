@@ -150,3 +150,19 @@ existing Java/Kotlin/ObjC/Swift investment.
 
 Learn more about what makes Flutter special in the
 <a href="https://flutter.io/technical-overview/">technical overview</a>.
+
+# More resources
+
+Join us in our [Gitter chat room](https://gitter.im/flutter/flutter) or join our public mailing list,
+[flutter-dev@googlegroups.com](https://groups.google.com/forum/#!forum/flutter-dev).
+
+# How to contribute
+
+To join the team working on Flutter, see our [contributor guide](CONTRIBUTING.md).
+
+[Build Status - Cirrus]: https://api.cirrus-ci.com/github/flutter/flutter.svg
+[Build status]: https://cirrus-ci.com/github/flutter/flutter/master
+[flutter.io]: https://flutter.io
+[Flutter logo]: https://github.com/dart-lang/site-shared/blob/master/src/_assets/image/flutter/icon/64.png?raw=1
+[Gitter Channel]: https://badges.gitter.im/flutter/flutter.svg
+[Gitter badge]: https://gitter.im/flutter/flutter?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
