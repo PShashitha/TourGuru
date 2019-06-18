@@ -339,6 +339,7 @@ class _HomePageState extends State<HomePage> {
             markers: {malabeMarker, malabeMarker2}));
   }
 
+
   Future<void> _gotoLocation(double lat, double long) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
