@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   int _counter = 0;
   String _destination = "(6.9356725,79.9842310)";
   String _source = "(6.9130779,79.9724734)";
+  //onItemTapped= ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=>new PlaceDetailPage(_currentPlaceId)));
 
   Completer<GoogleMapController> _controller = Completer();
 
@@ -332,7 +333,7 @@ class _HomePageState extends State<HomePage> {
         child: GoogleMap(
             mapType: MapType.normal,
             initialCameraPosition:
-                CameraPosition(target: LatLng(6.9356725, 79.9842310), zoom: 12),
+                CameraPosition(target: LatLng(6.9356725, 79.9842310), zoom: 12) ,
             onMapCreated: (GoogleMapController controller) {
               _controller.complete(controller);
             },
