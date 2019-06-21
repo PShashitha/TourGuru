@@ -1,7 +1,13 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'place_details_page.dart';
+import 'place_model.dart';
+import 'google_place_service.dart';
+import 'radial_menu/flutter_radial_menu.dart';
+//import 'package:geolocator/geolocator.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -21,13 +27,32 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+
+
+Marker malabeMarker = Marker(
+  markerId: MarkerId('malabe1'),
+  position: LatLng(6.9356725, 79.9842310),
+  infoWindow: InfoWindow(title: 'Kaduwela'),
+  icon: BitmapDescriptor.defaultMarkerWithHue(
+    BitmapDescriptor.hueMagenta,
+  ),
+);
+
+
 class _HomePageState extends State<HomePage> {
   int _counter = 0;
   String _destination = "(6.9356725,79.9842310)";
   String _source = "(6.9130779,79.9724734)";
-  //onItemTapped= ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=>new PlaceDetailPage(_currentPlaceId)));
+
+//
+//  var geolocator = Geolocator();
+//  Position position;
+
+  Map<MarkerId,Marker> markers = <MarkerId,Marker>{};
 
   Completer<GoogleMapController> _controller = Completer();
+  GoogleMapController _mapController ;
+
 
   void _incrementCounter() {
     setState(() {
@@ -43,46 +68,130 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    if (_places == null) {
+      LocationService.get().getNearbyPlaces().then((data) {
+        this.setState(() {
+          _places = data;
+        });
+      });
+    }
   }
 
   double zoomVal = 5.0;
+  String _currentPlaceId;
 
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
-    //
+    onItemTapped= ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=>new PlaceDetailPage(_currentPlaceId)));
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          appBar: AppBar(
 
-        leading: IconButton(
-            icon: Icon(FontAwesomeIcons.arrowLeft),
-            onPressed: () {
-              //
-            }),
+            title: Text("TourGuru"),
+            // Here we take the value from the MyHomePage object that was created by
+            // the App.build method, and use it to set our appbar title.
 
-        title: Text("MapView"),
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(FontAwesomeIcons.search),
-              onPressed: () {
-                //
-              }),
-        ],
-      ),
-      body: Stack(
-        children: <Widget>[
-          _googlemap(context),
-          _zoomminusfunction(),
-          _zoomplusfunction(),
-          _buildContainer(),
-        ],
-      ),
+
+            bottom: TabBar(
+                tabs: [
+                  Tab(icon:Icon(Icons.map)),
+                  Tab(icon:Icon(Icons.location_city)),
+
+             ]
+
+            ),
+
+            actions: <Widget>[
+              IconButton(
+                  icon: Icon(FontAwesomeIcons.searchLocation),
+                  onPressed: () {
+                    //Navigation Pane
+
+                        Drawer drawer = new Drawer(
+
+                        );
+
+                        return drawer;
+                  }),
+            ],
+          ),
+        drawer: new Drawer(
+          child: new ListView(
+            children: <Widget>[
+              new UserAccountsDrawerHeader(
+                accountName: new Text("username"),
+                accountEmail: new Text("useremail@mail.com"),
+                currentAccountPicture: new CircleAvatar(
+                  backgroundColor: Colors.grey,
+                  child: new Text("T"),
+                ),
+              ),
+              new ListTile(
+                title: new Text("page one",),
+                trailing: new Icon(Icons.arrow_upward),
+              ),
+              new ListTile(
+                title: new Text("page two",),
+                trailing: new Icon(Icons.arrow_downward),
+              ),
+              new Divider(),
+              new ListTile(
+                title: new Text("Close"),
+                trailing: new Icon(Icons.close),
+                onTap: () => Navigator.of(context).pop(),
+              )
+            ],
+          ),
+        ),
+
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniStartTop,
+        floatingActionButton:   new RadialMenu(
+
+          items: <RadialMenuItem<int>>[
+            const RadialMenuItem<int>(
+                value: 1,
+                child: const Icon(Icons.map,size: 50)
+            ),
+            const RadialMenuItem<int>(
+                value: 2,
+                child: const Icon(Icons.camera_front,size: 50)
+            ),
+            const RadialMenuItem<int>(
+                value: 3,
+                child: const Icon(Icons.audiotrack,size: 50)
+            ),
+            const RadialMenuItem<int>(
+                value: 4,
+                child: const Icon(Icons.explore,size: 60)
+            ),
+
+          ],
+          radius: 100.0,
+          onSelected:null,
+        ),
+          body: TabBarView(
+            physics: NeverScrollableScrollPhysics(),
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+
+                    _googlemap(context),
+                    _zoomminusfunction(),
+                    _zoomplusfunction(),
+                    _compassFunc(),
+                    _buildContainer(),
+                ]
+              ),
+              _createContent(),
+            ],
+          ),
+    )
       //      Center(
 //        // Center is a layout widget. It takes a single child and positions it
 //        // in the middle of the parent.
@@ -122,12 +231,113 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  final _biggerFont = const TextStyle(fontSize: 18.0);
+
+
+  Widget  _compassFunc(){
+    return  Align(
+        alignment: Alignment.topLeft,
+        child: Container(
+                margin: EdgeInsets.symmetric(vertical: 20.0),
+                height: 150.0,
+                child: FloatingActionButton(
+                  onPressed: ()=>{ _currentPosition},
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  backgroundColor: Colors.green,
+                  child: const Icon(Icons.add_location, size: 36.0),
+                ),
+        )
+    );
+  }
+
+
+
+  void _currentPosition(){
+    var markerIdVal = new DateTime.now().millisecondsSinceEpoch.toString();
+    final MarkerId markerId = MarkerId(markerIdVal);
+
+
+    StreamSubscription _getPositionSubscription;
+//    var locationOptions = LocationOptions (accuracy: LocationAccuracy.high,timeInterval: 10);
+//    _getPositionSubscription = geolocator.getPositionStream(locationOptions).listen(
+//        (Position position){
+//          this.position=position;
+//          print(position == null ? 'Unknown' : position.latitude.toString() + ', ' + position.longitude.toString());
+//          _mapController.animateCamera(
+//              CameraUpdate.newCameraPosition(
+//                CameraPosition(
+//                    target: LatLng(position.latitude,position.longitude), zoom: 20.0),
+//              ),
+//          );
+//        });
+  }
+
+//    final Marker marker = Marker(
+//        markerId: markerId,
+//
+//        position: LatLng(
+////          center.latitude + sin(_markedIdCounter*pi/6.0)/20.0,
+//          6.9356725,
+//          79.9842310,
+////          center.longitude + cos(_markedIdCounter*pi/6.0)/20.0,
+//        ),
+//    ),
+//    infoWindow:InfoWindow(title:markedIdVal,snippet:'*'),
+//    onTap:(){
+//      _onMarker
+//
+//    }
+//
+
+//  }
+//
+
+
+
+  Widget _createContent() {
+
+    if(_places == null){
+      return new Center(
+        child: new CircularProgressIndicator(),
+      );
+    }else{
+      return new ListView(
+        children: _places.map((f){
+
+          return new Card(
+            child: new ListTile(
+                title: new Text(f.name,style: _biggerFont,),
+                leading: new Image.network(f.icon),
+                subtitle: new Text(f.vicinity),
+                onTap: (){
+                  _currentPlaceId = f.id;
+                  // onItemTapped();
+                  handleItemTap(f);
+                }
+            ),
+          )
+          ;
+        }).toList(),
+      );
+    }
+  }
+  List<PlaceDetail> _places;
+
+
+
+  handleItemTap(PlaceDetail place){
+
+    Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context)=>new PlaceDetailPage(place.id)));
+  }
+
+
   Widget _zoomminusfunction() {
     return Align(
-      alignment: Alignment.topLeft,
+      alignment: Alignment(1,-0.8),
       child: IconButton(
           icon: Icon(FontAwesomeIcons.searchMinus, color: Color(0xff6200ee)),
           onPressed: () {
+
             zoomVal--;
             _minus(zoomVal);
           }),
@@ -149,13 +359,13 @@ class _HomePageState extends State<HomePage> {
   Future<void> _minus(double zoomVal) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(40.712776, -74.005974), zoom: zoomVal)));
+        CameraPosition(target: malabeMarker.position, zoom: zoomVal)));
   }
 
   Future<void> _plus(double zoomVal) async {
     final GoogleMapController controller = await _controller.future;
     controller.animateCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: LatLng(40.712776, -74.005974), zoom: zoomVal)));
+        CameraPosition(target: malabeMarker.position, zoom: zoomVal)));
   }
 
   Widget _buildContainer() {
@@ -331,13 +541,25 @@ class _HomePageState extends State<HomePage> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: GoogleMap(
+            onMapCreated: (GoogleMapController controller) {
+              _mapController = controller;
+              _controller.complete(controller);
+            },
             mapType: MapType.normal,
             initialCameraPosition:
                 CameraPosition(target: LatLng(6.9356725, 79.9842310), zoom: 12) ,
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
-            },
-            markers: {malabeMarker, malabeMarker2}));
+            scrollGesturesEnabled: true,
+            tiltGesturesEnabled: true,
+            rotateGesturesEnabled: true,
+            myLocationEnabled: true,
+            compassEnabled: true,
+
+            zoomGesturesEnabled: true,
+
+          markers: {malabeMarker,malabeMarker2},
+
+
+        ));
   }
 
   Future<void> _gotoLocation(double lat, double long) async {
@@ -349,16 +571,8 @@ class _HomePageState extends State<HomePage> {
       bearing: 45.0,
     )));
   }
+  VoidCallback onItemTapped;
 }
-
-Marker malabeMarker = Marker(
-  markerId: MarkerId('malabe1'),
-  position: LatLng(6.9356725, 79.9842310),
-  infoWindow: InfoWindow(title: 'Kaduwela'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueMagenta,
-  ),
-);
 Marker malabeMarker2 = Marker(
   markerId: MarkerId('malabe2'),
   position: LatLng(6.9130779, 79.9724734),
