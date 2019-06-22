@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'place_model.dart';
-import 'google_place_service.dart';
-import 'place_details_page.dart';
+import 'package:tourguru/models/place_model.dart';
+import 'package:tourguru/services/google_place_service.dart';
+import 'package:tourguru/screens/mapbased_interface/place_details_page.dart';
 
 class PlacesPage extends StatefulWidget {
   @override
@@ -16,7 +16,6 @@ class Placestate extends State<PlacesPage> {
 
     onItemTapped= ()=> Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context)=>new PlaceDetailPage(_currentPlaceId)));
 
-    // TODO: implement build
     return new Scaffold(
       appBar: new AppBar(
         title: new Text("Nearby places"),

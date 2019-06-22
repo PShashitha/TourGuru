@@ -1,5 +1,5 @@
 import 'package:http/http.dart' as http;
-import 'package:tourguru/place_model.dart';
+import 'package:tourguru/models/place_model.dart';
 import 'dart:async';
 import 'dart:convert';
 

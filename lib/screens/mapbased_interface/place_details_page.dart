@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'place_model.dart';
-import 'google_place_service.dart';
+import 'package:tourguru/models/place_model.dart';
+import 'package:tourguru/services/google_place_service.dart';
 
 class PlaceDetailPage extends StatefulWidget {
   final String _place_id;
