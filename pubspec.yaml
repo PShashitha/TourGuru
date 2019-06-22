@@ -15,6 +15,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  google_maps_flutter: ^0.5.18
+  font_awesome_flutter: ^8.2.0
+#  geolocation: ^2.0.1
+
+
+
+#  Google web services plagin dapiya
+
+
+#
+#
+  http:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
