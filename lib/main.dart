@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+//import 'package:map_view/map_view.dart';
 import 'package:tourguru/screens/mapbased_interface/homepage.dart';
 
-void main()=>runApp(MyApp());
+void main(){
+
+String apiKey = "AIzaSyD6Wijikbtmj0aUbp66bOcvs-ALOIi9cSU";
+
+//MapView.setApiKey(apiKey);
+
+runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

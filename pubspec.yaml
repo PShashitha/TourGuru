@@ -15,9 +15,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_maps_flutter: ^0.5.18
+  google_maps_flutter: ^0.5.19
   font_awesome_flutter: ^8.2.0
+#  map_view: ^0.0.14
 #  geolocation: ^2.0.1
+  location: 1.4.1
 
 
 

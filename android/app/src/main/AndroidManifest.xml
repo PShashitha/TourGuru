@@ -38,8 +38,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!--<activity android:name="com.apptreesoftware.mapview.MapActivity"-->
+            <!--android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBLcIpermU2uTd2ny81zbPVoWXNwQ8_6JU" />
+            android:value="AIzaSyD6Wijikbtmj0aUbp66bOcvs-ALOIi9cSU" />
+
     </application>
 </manifest>

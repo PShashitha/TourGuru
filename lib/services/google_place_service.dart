@@ -19,6 +19,7 @@ class LocationService {
     var reponse = await http.get(url, headers: {"Accept": "application/json"});
 
     List data = json.decode(reponse.body)["results"];
+    print(data);
     var places = <PlaceDetail>[];
     data.forEach((f) => places.add(new PlaceDetail(f["place_id"], f["name"],
         f["icon"], f["rating"].toString(), f["vicinity"])));
