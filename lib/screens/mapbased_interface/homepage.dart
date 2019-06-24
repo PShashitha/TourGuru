@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
     // by the _incrementCounter method above.
     onItemTapped = () => Navigator.of(context).push(new MaterialPageRoute(
         builder: (BuildContext context) =>
-            new PlaceDetailPage(_currentPlaceId)));
+        new PlaceDetailPage(_currentPlaceId)));
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
@@ -146,8 +146,8 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return HomePage();
-                      }));
+                            return HomePage();
+                          }));
                     }),
                 new Divider(),
                 new ListTile(
@@ -158,8 +158,8 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return AR3DView();
-                      }));
+                            return AR3DView();
+                          }));
                     }),
                 new ListTile(
                     title: new Text(
@@ -169,8 +169,8 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return ARPOIView();
-                      }));
+                            return ARPOIView();
+                          }));
                     }),
                 new ListTile(
                     title: new Text(
@@ -180,8 +180,8 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return AudioTour();
-                      }));
+                            return AudioTour();
+                          }));
                     }),
                 new Divider(),
                 new ListTile(
@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           floatingActionButtonLocation:
-              FloatingActionButtonLocation.miniStartTop,
+          FloatingActionButtonLocation.miniStartTop,
           floatingActionButton: new RadialMenu(
             items: <RadialMenuItem<int>>[
               const RadialMenuItem<int>(
@@ -212,6 +212,7 @@ class _HomePageState extends State<HomePage> {
             physics: NeverScrollableScrollPhysics(),
             children: <Widget>[
               Stack(children: <Widget>[
+                //Create Google Map Interface
                 _googlemap(context),
                 Positioned(
                   top: 50.0,
@@ -312,7 +313,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
         )
-        //      Center(
+      //      Center(
 //        // Center is a layout widget. It takes a single child and positions it
 //        // in the middle of the parent.
 //        child: Column(
@@ -348,7 +349,7 @@ class _HomePageState extends State<HomePage> {
 //        tooltip: 'Increment',
 //        child: Icon(Icons.add_alarm),
 //      ), // This trailing comma makes auto-formatting nicer for build methods.
-        );
+    );
   }
 
   final _biggerFont = const TextStyle(fontSize: 18.0);
@@ -560,89 +561,89 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.only(left: 8.0),
           child: Container(
               child: Text(
-            destinationName,
-            style: TextStyle(
-                color: Color(0xff6200ee),
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold),
-          )),
+                destinationName,
+                style: TextStyle(
+                    color: Color(0xff6200ee),
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold),
+              )),
         ),
         SizedBox(height: 5.0),
         Container(
             child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(
-                child: Text(
-              "4.1",
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Container(
+                    child: Text(
+                      "4.1",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 18.0,
+                      ),
+                    )),
+                Container(
+                  child: Icon(
+                    FontAwesomeIcons.solidStar,
+                    color: Colors.amber,
+                    size: 15.0,
+                  ),
+                ),
+                Container(
+                  child: Icon(
+                    FontAwesomeIcons.solidStar,
+                    color: Colors.amber,
+                    size: 15.0,
+                  ),
+                ),
+                Container(
+                  child: Icon(
+                    FontAwesomeIcons.solidStar,
+                    color: Colors.amber,
+                    size: 15.0,
+                  ),
+                ),
+                Container(
+                  child: Icon(
+                    FontAwesomeIcons.solidStar,
+                    color: Colors.amber,
+                    size: 15.0,
+                  ),
+                ),
+                Container(
+                  child: Icon(
+                    FontAwesomeIcons.solidStarHalf,
+                    color: Colors.amber,
+                    size: 15.0,
+                  ),
+                ),
+                Container(
+                    child: Text(
+                      "(946)",
+                      style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 18.0,
+                      ),
+                    )),
+              ],
+            )),
+        SizedBox(height: 5.0),
+        Container(
+            child: Text(
+              "American \u00B7 \u0024\u0024 \u00B7 1.6 mi",
               style: TextStyle(
                 color: Colors.black54,
                 fontSize: 18.0,
               ),
             )),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStarHalf,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-                child: Text(
-              "(946)",
+        SizedBox(height: 5.0),
+        Container(
+            child: Text(
+              "Closed \u00B7 Opens 17:00 Thu",
               style: TextStyle(
-                color: Colors.black54,
-                fontSize: 18.0,
-              ),
+                  color: Colors.black54,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold),
             )),
-          ],
-        )),
-        SizedBox(height: 5.0),
-        Container(
-            child: Text(
-          "American \u00B7 \u0024\u0024 \u00B7 1.6 mi",
-          style: TextStyle(
-            color: Colors.black54,
-            fontSize: 18.0,
-          ),
-        )),
-        SizedBox(height: 5.0),
-        Container(
-            child: Text(
-          "Closed \u00B7 Opens 17:00 Thu",
-          style: TextStyle(
-              color: Colors.black54,
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold),
-        )),
       ],
     );
   }
@@ -655,7 +656,7 @@ class _HomePageState extends State<HomePage> {
 
           mapType: MapType.normal,
           initialCameraPosition:
-              CameraPosition(target: LatLng(6.9356725, 79.9842310), zoom: 12),
+          CameraPosition(target: LatLng(6.9356725, 79.9842310), zoom: 12),
           scrollGesturesEnabled: true,
           tiltGesturesEnabled: true,
           rotateGesturesEnabled: true,
@@ -799,3 +800,10 @@ Marker malabeMarker2 = Marker(
     BitmapDescriptor.hueMagenta,
   ),
 );
+
+//  Marker malabeMarker = new Marker(
+//      'Kaduwela1', 'Kaduwela', 6.9356725, 79.9842310,
+//      draggable: true, color: Colors.teal);
+//
+//  Marker malabeMarker2 = Marker('malabe2', 'SLIIT', 6.9130779, 79.9724734,
+//      draggable: true, color: Colors.teal);

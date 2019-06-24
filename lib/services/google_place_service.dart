@@ -2,9 +2,15 @@ import 'package:http/http.dart' as http;
 import 'package:tourguru/models/place_model.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:location/location.dart';
+import 'package:flutter/services.dart' show PlatformException;
+
 
 class LocationService {
   static final _locationService = new LocationService();
+
+
 
   static LocationService get() {
     return _locationService;
@@ -19,6 +25,7 @@ class LocationService {
     var reponse = await http.get(url, headers: {"Accept": "application/json"});
 
     List data = json.decode(reponse.body)["results"];
+    print(data);
     var places = <PlaceDetail>[];
     data.forEach((f) => places.add(new PlaceDetail(f["place_id"], f["name"],
         f["icon"], f["rating"].toString(), f["vicinity"])));
