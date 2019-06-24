@@ -106,7 +106,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
 
 
   Widget _compassToggler() {
-    return FlatButton(
+    return MaterialButton(
       child: Text('${_compassEnabled ? 'disable' : 'enable'} compass'),
       onPressed: () {
         setState(() {

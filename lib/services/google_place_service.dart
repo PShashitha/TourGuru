@@ -2,9 +2,15 @@ import 'package:http/http.dart' as http;
 import 'package:tourguru/models/place_model.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:location/location.dart';
+import 'package:flutter/services.dart' show PlatformException;
+
 
 class LocationService {
   static final _locationService = new LocationService();
+
+
 
   static LocationService get() {
     return _locationService;
