@@ -1,6 +1,11 @@
 <component name="libraryTable">
   <library name="Flutter Plugins" type="FlutterPluginsLibraryType">
-    <CLASSES />
+    <CLASSES>
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-0.5.19" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/location-1.4.1" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_text_to_speech-3.0.6" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_tts-0.2.6" />
+    </CLASSES>
     <JAVADOC />
     <SOURCES />
   </library>
