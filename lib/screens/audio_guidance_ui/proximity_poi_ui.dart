@@ -1,39 +1,69 @@
 import 'dart:async';
+import 'dart:math';
 
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:location/location.dart';
 import 'package:flutter/services.dart' show PlatformException;
 
-
-class PPOIConfigUI extends StatefulWidget{
-  PPOIConfigUI({Key loc, this.currentLocation }) : super(key:loc);
+class PPOIConfigUI extends StatefulWidget {
+  PPOIConfigUI({Key loc, this.currentLocation}) : super(key: loc);
 
   final String currentLocation;
 
   @override
   _PPOIConfigUIState createState() => _PPOIConfigUIState();
+}
 
-  }
+/**
+ * Set a variable as props from HomePage that sent as geo location of device
+ */
+//  final LatLngBounds mlbBounds= LatLngBounds(
+//    southwest:  LatLng(southwestlat, southwestlon),
+//    northeast:  LatLng(northeastlat, northeastlon),
+//  );
 
-final LatLngBounds mlbBounds= LatLngBounds(
-  southwest: const LatLng(6.8880244, 79.9494517),
-  northeast: const LatLng(6.9418313, 80.0212095),
-);
-
-
-class _PPOIConfigUIState extends State<PPOIConfigUI>{
-
+class _PPOIConfigUIState extends State<PPOIConfigUI> {
   _PPOIConfigUIState();
 
-  Map<String, double>   _currentLocation = new Map();
-  StreamSubscription<Map<String,double>> locationSubscription;
+  //To map the location latitude, longitude
+  static Map<String, double> _currentLocation = new Map();
+  //An listener to get all events based on location change
+  StreamSubscription<Map<String, double>> locationSubscription;
 
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  MarkerId selectedMarker;
+  int _markerIdCounter = 1;
+
+
+  LatLng _mapLongPressedPos;
+
+  //To map circle on the map with an id to identify selected circle(tapped)
+  Map<CircleId, Circle> circles = <CircleId, Circle>{};
+  Circle createdCircle;
+  CircleId circleID;
+
+  //Defines circle color
+  int filColorIndex = 0;
+  int strokeColorsIndex = 0;
+  List<Color> colors = <Color>[
+    Colors.purple,
+    Colors.red,
+    Colors.transparent,
+    Colors.yellowAccent,
+  ];
+
+  int _circleIDCounter = 1;
+  CircleId selectedCircle;
 
   Location location = new Location();
+
   String error;
 
+  double _radius = 7000;
 
   @override
   void dispose() {
@@ -41,7 +71,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     //Default variable initialized to 0
@@ -50,42 +80,131 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
 
     initPlatformState();
 
-    locationSubscription = location.onLocationChanged().listen((Map<String,double> result){
-
+    locationSubscription =
+        location.onLocationChanged().listen((Map<String, double> result) {
       setState(() {
         _currentLocation = result;
       });
     });
-
   }
 
+  void _onMarkerTapped(MarkerId markerId) {
+    final Marker tappedMarker = markers[markerId];
+    if (tappedMarker != null) {
+      setState(() {
+        if (markers.containsKey(selectedMarker)) {
+          final Marker resetOld = markers[selectedMarker]
+              .copyWith(iconParam: BitmapDescriptor.defaultMarker);
+          markers[selectedMarker] = resetOld;
+        }
+        selectedMarker = markerId;
+        final Marker newMarker = tappedMarker.copyWith(
+          iconParam: BitmapDescriptor.defaultMarkerWithHue(
+            BitmapDescriptor.hueGreen,
+          ),
+        );
+        markers[markerId] = newMarker;
+      });
+    }
+  }
 
-  void initPlatformState () async{
+  void _addLongPressedMarker(LatLng pos) {
+    final int markerCount = markers.length;
 
-    Map<String,double> my_location;
-    try{
-      my_location = await location.getLocation();
-      error = "";
-    }on PlatformException catch(e){
-        if(e.code == 'PERMISSION_DENIED')
-          error = "Permission Denied";
-        else if(e.code == 'PERMISSION_DENIED_NEVER_ASK')
-          error = "Permission Denied - Give the needed permission to get current location.";
-        my_location = null;
+    if (markerCount == 12) {
+      return;
     }
 
+    final String markerIdVal = 'marker_id_$_markerIdCounter';
+    _markerIdCounter++;
+    final MarkerId markerId = MarkerId(markerIdVal);
+
+    final Marker marker = Marker(
+      markerId: markerId,
+      position: LatLng(
+        pos.latitude,
+        pos.longitude,
+      ),
+      infoWindow: InfoWindow(title: markerIdVal, snippet: '*'),
+      onTap: () {
+        _onMarkerTapped(markerId);
+      },
+    );
+
     setState(() {
-      _currentLocation = my_location;
+      markers[markerId] = marker;
+    });
+  }
+
+  void _onCircleTapped(CircleId circleId) {
+    setState(() {
+      selectedCircle = circleId;
     });
   }
 
 
+  void _changeRadius(){
+//    final Circle circle = circles[createdCircle];
 
+    setState(() {
+      circles[circleID] = createdCircle.copyWith(
+        radiusParam: _radius,
+      );
+    });
+  }
 
-  static final CameraPosition _kInitialPosition = const CameraPosition(
-      target: LatLng(6.9145910,79.9726142 ),
-    zoom:11.0
-  );
+  //Add a radius Circle
+  void _addCircle() {
+    final int circleCount = circles.length;
+    if (circleCount == 2) return;
+
+    final String circleIDValue = 'circle_id_$_circleIDCounter';
+    final CircleId circleId = CircleId(circleIDValue);
+    circleID = circleId;
+
+    final Circle circle = Circle(
+        circleId: circleId,
+        consumeTapEvents: true,
+        strokeColor: Color.fromRGBO(255, 255, 64, 0.2),
+        fillColor: Color.fromRGBO(0, 0, 205, 0.2),
+        strokeWidth: 100,
+        center: _createCenter(),
+        radius: 7000,
+        onTap: () {
+          _onCircleTapped(circleId);
+        });
+
+    createdCircle = circle;
+    setState(() {
+      createdCircle = circle;
+      circles[circleId] = circle;
+    });
+  }
+
+  void initPlatformState() async {
+    Map<String, double> my_location;
+    try {
+      my_location = await location.getLocation();
+      error = "";
+    } on PlatformException catch (e) {
+      if (e.code == 'PERMISSION_DENIED')
+        error = "Permission Denied";
+      else if (e.code == 'PERMISSION_DENIED_NEVER_ASK')
+        error =
+            "Permission Denied - Give the needed permission to get current location.";
+      my_location = null;
+    }
+
+    setState(() {
+      _currentLocation = my_location;
+      if(_currentLocation!=null)
+        _position =
+          CameraPosition(target: LatLng(_currentLocation['latitude'], _currentLocation['longitude']), zoom: 11.0);
+    });
+  }
+
+  static final CameraPosition _kInitialPosition =
+       CameraPosition(target: LatLng(6.9146469, 79.9731601), zoom: 11.0);
   CameraPosition _position = _kInitialPosition;
   bool _isMapCreated = false;
   bool _isMoving = false;
@@ -102,8 +221,6 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
   bool _myLocationButtonEnabled = true;
   GoogleMapController _controller;
   bool _nightMode = false;
-
-
 
   Widget _compassToggler() {
     return MaterialButton(
@@ -124,11 +241,11 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
             : 'release camera target',
       ),
       onPressed: () {
-        setState(() {
-          _cameraTargetBounds = _cameraTargetBounds.bounds == null
-              ? CameraTargetBounds(mlbBounds)
-              : CameraTargetBounds.unbounded;
-        });
+//        setState(() {
+//          _cameraTargetBounds = _cameraTargetBounds.bounds == null
+//              ? CameraTargetBounds(mlbBounds)
+//              : CameraTargetBounds.unbounded;
+//        });
       },
     );
   }
@@ -150,7 +267,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
 
   Widget _mapTypeCycler() {
     final MapType nextType =
-    MapType.values[(_mapType.index + 1) % MapType.values.length];
+        MapType.values[(_mapType.index + 1) % MapType.values.length];
     return FlatButton(
       child: Text('change map type to $nextType'),
       onPressed: () {
@@ -231,7 +348,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
   Widget _myLocationButtonToggler() {
     return FlatButton(
       child: Text(
-          '${_myLocationButtonEnabled ? 'disable' : 'enable'} my location button'),
+          '${_myLocationButtonEnabled ? 'disable' : 'enable'} Enable Nararted Guidance'),
       onPressed: () {
         setState(() {
           _myLocationButtonEnabled = !_myLocationButtonEnabled;
@@ -251,6 +368,26 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
     });
   }
 
+  Widget _radiusOfPOIDetection(){
+    if(!_isMapCreated){
+      return null;
+    }
+    return Slider(
+      label: "Set Proximity Radius",
+      activeColor: Colors.orangeAccent,
+      min: 1000,
+      max: 50000,
+      divisions: 5,
+      value: _radius,
+      onChanged: (double val){
+        setState(() {
+          _radius = val;
+
+        });
+        _changeRadius();
+      },
+    );
+  }
   Widget _nightModeToggler() {
     if (!_isMapCreated) {
       return null;
@@ -275,6 +412,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
     final GoogleMap gMap = GoogleMap(
       onMapCreated: onMapCreated,
       initialCameraPosition: _kInitialPosition,
+      circles: Set<Circle>.of(circles.values),
       compassEnabled: _compassEnabled,
       cameraTargetBounds: _cameraTargetBounds,
       minMaxZoomPreference: _minMaxZoomPreference,
@@ -286,10 +424,24 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
       indoorViewEnabled: _indoorViewEnabled,
       myLocationEnabled: _myLocationEnabled,
       myLocationButtonEnabled: _myLocationButtonEnabled,
+      gestureRecognizers:
+          // TODO(iskakaushik): Remove this when collection literals makes it to stable.
+          // https://github.com/flutter/flutter/issues/28312
+          // ignore: prefer_collection_literals
+          <Factory<OneSequenceGestureRecognizer>>[
+        Factory<OneSequenceGestureRecognizer>(
+          () => EagerGestureRecognizer(),
+        ),
+      ].toSet(),
       onCameraMove: _updateCameraPos,
+      onLongPress: (LatLng pos) {
+        _addLongPressedMarker(pos);
+        setState(() {
+          _mapLongPressedPos = pos;
+        });
+      },
+      markers: Set<Marker>.of(markers.values),
     );
-
-
 
     final List<Widget> columnChildren = <Widget>[
       Padding(
@@ -304,61 +456,69 @@ class _PPOIConfigUIState extends State<PPOIConfigUI>{
       )
     ];
 
-    if (_isMapCreated){
-      columnChildren.add(
-        Expanded(
-          child: ListView(
-            children: <Widget>[
-              Text('Curreent location: ${_currentLocation['latitude']} , ${_currentLocation['longitude']}',style: TextStyle(fontSize: 20.0,color: Colors.blueAccent)),
-              Text('Camaera bearing:  ${_position.bearing}'),
-              Text(
-                'Camera Target: ${_position.target.latitude.toStringAsFixed(4)},'
-                    '${_position.target.longitude.toStringAsFixed(4)}'),
-              Text('camera zoom: ${_position.zoom}'),
-              Text('camera tilt: ${_position.tilt}'),
-              Text(_isMoving ? '(Camera moving)' : '(Camera idle)'),
-              _compassToggler(),
-              _latLngBoundsToggler(),
-              _mapTypeCycler(),
-              _zoomBoundsToggler(),
-              _rotateToggler(),
-              _scrollToggler(),
-              _tiltToggler(),
-              _zoomToggler(),
-              _indoorViewToggler(),
-              _myLocationToggler(),
-              _myLocationButtonToggler(),
-              _nightModeToggler(),
-
-            ]
-          ),
-        )
-      );
+    if (_isMapCreated) {
+      columnChildren.add(Expanded(
+        child: ListView(children: <Widget>[
+          Text(
+              'Curreent location: ${_currentLocation['latitude']} , ${_currentLocation['longitude']}',
+              style: TextStyle(fontSize: 20.0, color: Colors.blueAccent)),
+          Text('Camaera bearing:  ${_position.bearing}'),
+          Text('Camera Target: ${_position.target.latitude.toStringAsFixed(4)},'
+              '${_position.target.longitude.toStringAsFixed(4)}'),
+          Text('camera zoom: ${_position.zoom}'),
+          Text('camera tilt: ${_position.tilt}'),
+          Text(_isMoving ? '(Camera moving)' : '(Camera idle)'),
+//              _compassToggler(),
+//               button to get the cmera bounds to certain area
+//              _latLngBoundsToggler(),
+        _radiusOfPOIDetection(),
+          _mapTypeCycler(),
+          _myLocationToggler(),
+          _myLocationButtonToggler(),
+          _nightModeToggler(),
+        ]),
+      ));
     }
 
-   return Column(
-     mainAxisAlignment: MainAxisAlignment.start,
-     crossAxisAlignment: CrossAxisAlignment.stretch,
-     children: columnChildren,
-   );
-  }
-
-  Widget _buildConfigColumn(){
     return Column(
-
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: columnChildren,
     );
   }
 
-  void  _updateCameraPos(CameraPosition pos){
+  Widget _buildConfigColumn() {
+    return Column();
+  }
+
+
+  void _updateCameraPos(CameraPosition pos) {
     setState(() {
       _position = pos;
     });
   }
 
-  void onMapCreated(GoogleMapController gMapController){
+  void onMapCreated(GoogleMapController gMapController) {
+    _addCircle();
     setState(() {
       _controller = gMapController;
       _isMapCreated = true;
     });
+  }
+
+  LatLng _createLatLng(double lat, double lng) {
+    return LatLng(lat, lng);
+  }
+
+  LatLng _createCenter() {
+    final double offset = _circleIDCounter.ceilToDouble();
+    if (_currentLocation == null) {
+      _currentLocation['latitude'] = 6.4444;
+      _currentLocation['longitude'] = 79.22;
+    }
+    return _createLatLng(
+        _currentLocation['latitude'], _currentLocation['longitude']);
+//    print("Current Location<><><>Latitude:"+_currentLocation['latitude'].toString()+"longitude"+_currentLocation['longitude'].toString());
+    return _createLatLng(6.9146, 79.9726);
   }
 }
