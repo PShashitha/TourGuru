@@ -1,4 +1,4 @@
-package com.example.tourguru;
+package com.cdap.tourguru;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

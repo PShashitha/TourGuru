@@ -39,7 +39,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
   int _markerIdCounter = 1;
 
 
-  LatLng _mapLongPressedPos;
+  List<LatLng> _mapLongPressedPos = new List<LatLng>();
 
   //To map circle on the map with an id to identify selected circle(tapped)
   Map<CircleId, Circle> circles = <CircleId, Circle>{};
@@ -221,6 +221,8 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
   bool _myLocationButtonEnabled = true;
   GoogleMapController _controller;
   bool _nightMode = false;
+  bool _isWalking = false;
+  bool _isDriving = false;
 
   Widget _compassToggler() {
     return MaterialButton(
@@ -368,6 +370,67 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
     });
   }
 
+  Widget _travelTypeConfig(){
+
+    if(!_isMapCreated){
+      return null;
+    }
+    return Center(
+      child: Card(
+        color: Colors.lightGreen,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            const ListTile(
+              leading: Icon(Icons.card_travel),
+              title: Text('Preffered Travel Options'),
+              subtitle: Text('Configure the tavel method'),
+            ),
+            ListTile(
+              title: Text('Walking'),
+              trailing: Switch(
+                  value: _isWalking,
+                  onChanged: (bool value){
+                    setState(() {
+                      _isWalking = value;
+                      _isDriving = !value;
+                    });
+                  }),
+              onTap: (){
+                setState(() {
+                  _isDriving = _isWalking;
+                  _isWalking = !_isWalking;
+                });
+              },
+
+            ),
+            ListTile(
+              title: Text('Driving'),
+              trailing: Switch(
+                  value: _isDriving,
+                  onChanged: (bool value){
+                    setState(() {
+                      _isDriving = value;
+                      _isWalking = !value;
+                    });
+                  }),
+              onTap: (){
+                setState(() {
+                  _isWalking = _isDriving;
+                  _isDriving = !_isDriving;
+                });
+              },
+
+            ),
+          ],
+        ),
+
+      ),
+
+
+    );
+  }
+
   Widget _radiusOfPOIDetection(){
     if(!_isMapCreated){
       return null;
@@ -437,7 +500,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
       onLongPress: (LatLng pos) {
         _addLongPressedMarker(pos);
         setState(() {
-          _mapLongPressedPos = pos;
+          _mapLongPressedPos.add(pos);
         });
       },
       markers: Set<Marker>.of(markers.values),
@@ -461,7 +524,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
         child: ListView(children: <Widget>[
           Text(
               'Curreent location: ${_currentLocation['latitude']} , ${_currentLocation['longitude']}',
-              style: TextStyle(fontSize: 20.0, color: Colors.blueAccent)),
+              style: TextStyle(fontSize: 18.0, color: Colors.blueAccent), textAlign: TextAlign.center),
           Text('Camaera bearing:  ${_position.bearing}'),
           Text('Camera Target: ${_position.target.latitude.toStringAsFixed(4)},'
               '${_position.target.longitude.toStringAsFixed(4)}'),
@@ -471,7 +534,8 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
 //              _compassToggler(),
 //               button to get the cmera bounds to certain area
 //              _latLngBoundsToggler(),
-        _radiusOfPOIDetection(),
+          _travelTypeConfig(),
+          _radiusOfPOIDetection(),
           _mapTypeCycler(),
           _myLocationToggler(),
           _myLocationButtonToggler(),
@@ -480,15 +544,15 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
       ));
     }
 
+    return _buildConfigColumn(columnChildren);
+  }
+
+  Widget _buildConfigColumn(List<Widget> widgets) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: columnChildren,
+      children: widgets,
     );
-  }
-
-  Widget _buildConfigColumn() {
-    return Column();
   }
 
 

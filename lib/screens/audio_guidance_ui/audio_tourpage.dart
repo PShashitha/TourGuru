@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:tourguru/screens/audio_guidance_ui/proximity_poi_ui.dart';
+import 'package:tourguru/screens/audio_guidance_ui/speech_config_ui.dart';
 
 class AudioTour extends StatefulWidget {
   AudioTour({Key key, this.title}) : super(key: key);
@@ -34,7 +35,7 @@ class _AudioTourState extends State<AudioTour> {
           ),
           body: TabBarView(children: <Widget>[
             PPOIConfigUI(currentLocation : "Configuration of Proximity POI detection"),
-            new Text("AT tab page")
+            SpeechConfig(),
           ]),
         ));
   }
