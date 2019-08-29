@@ -41,5 +41,13 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>Privacy - Camera Usage Description</key>
+        <string>$(PRODUCT_NAME) camera use</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <key>Privacy - Photo Library Usage Description/key>
+        <string>Application requires user’s permission for accessing photo libraries</string>
+    <key>io.flutter.embedded_views_preview</key>
+        <string>YES</string>
 </dict>
 </plist>

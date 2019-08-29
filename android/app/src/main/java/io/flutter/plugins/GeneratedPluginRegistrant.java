@@ -1,10 +1,11 @@
 package io.flutter.plugins;
 
 import io.flutter.plugin.common.PluginRegistry;
-import com.flutter.text_to_speech.FlutterTextToSpeechPlugin;
+import com.wikitude.wikitude_plugin.WikitudePlugin;
 import com.tundralabs.fluttertts.FlutterTtsPlugin;
 import io.flutter.plugins.googlemaps.GoogleMapsPlugin;
 import com.lyokone.location.LocationPlugin;
+import io.flutter.plugins.webviewflutter.WebViewFlutterPlugin;
 
 /**
  * Generated file. Do not edit.
@@ -14,10 +15,11 @@ public final class GeneratedPluginRegistrant {
     if (alreadyRegisteredWith(registry)) {
       return;
     }
-    FlutterTextToSpeechPlugin.registerWith(registry.registrarFor("com.flutter.text_to_speech.FlutterTextToSpeechPlugin"));
+    WikitudePlugin.registerWith(registry.registrarFor("com.wikitude.wikitude_plugin.WikitudePlugin"));
     FlutterTtsPlugin.registerWith(registry.registrarFor("com.tundralabs.fluttertts.FlutterTtsPlugin"));
     GoogleMapsPlugin.registerWith(registry.registrarFor("io.flutter.plugins.googlemaps.GoogleMapsPlugin"));
     LocationPlugin.registerWith(registry.registrarFor("com.lyokone.location.LocationPlugin"));
+    WebViewFlutterPlugin.registerWith(registry.registrarFor("io.flutter.plugins.webviewflutter.WebViewFlutterPlugin"));
   }
 
   private static boolean alreadyRegisteredWith(PluginRegistry registry) {

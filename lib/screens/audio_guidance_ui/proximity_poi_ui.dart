@@ -29,10 +29,11 @@ class PPOIConfigUI extends StatefulWidget {
 class _PPOIConfigUIState extends State<PPOIConfigUI> {
   _PPOIConfigUIState();
 
+  LocationData _startLocation;
   //To map the location latitude, longitude
-  static Map<String, double> _currentLocation = new Map();
+  LocationData _currentLocation;
   //An listener to get all events based on location change
-  StreamSubscription<Map<String, double>> locationSubscription;
+  StreamSubscription<LocationData> _locationSubscription;
 
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   MarkerId selectedMarker;
@@ -59,9 +60,23 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
   int _circleIDCounter = 1;
   CircleId selectedCircle;
 
-  Location location = new Location();
+  Location _locationService = new Location();
+  bool _permission = false;
+
 
   String error;
+
+  bool currentWidget = true;
+
+  Completer<GoogleMapController> _controller = Completer();
+
+  static final CameraPosition _initialCamera = CameraPosition(
+    target: LatLng(0,0),
+    zoom: 4,
+  );
+
+  CameraPosition _currentCameraPosition;
+  GoogleMap googleMap;
 
   double _radius = 7000;
 
@@ -74,18 +89,9 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
   void initState() {
     super.initState();
 
-    //Default variable initialized to 0
-    _currentLocation['latitude'] = 0.0;
-    _currentLocation['longitude'] = 0.0;
 
     initPlatformState();
 
-    locationSubscription =
-        location.onLocationChanged().listen((Map<String, double> result) {
-      setState(() {
-        _currentLocation = result;
-      });
-    });
   }
 
   void _onMarkerTapped(MarkerId markerId) {
@@ -168,7 +174,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
         strokeColor: Color.fromRGBO(255, 255, 64, 0.2),
         fillColor: Color.fromRGBO(0, 0, 205, 0.2),
         strokeWidth: 100,
-        center: _createCenter(),
+        center : LatLng(_currentLocation.longitude,_currentLocation.longitude),
         radius: 7000,
         onTap: () {
           _onCircleTapped(circleId);
@@ -182,24 +188,68 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
   }
 
   void initPlatformState() async {
-    Map<String, double> my_location;
+
+    await _locationService.changeSettings(accuracy: LocationAccuracy.HIGH, interval: 1000);
+
+    LocationData location;
+    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      my_location = await location.getLocation();
-      error = "";
+      bool serviceStatus = await _locationService.serviceEnabled();
+      print("Service status: $serviceStatus");
+      if (serviceStatus) {
+        _permission = await _locationService.requestPermission();
+        print("Permission: $_permission");
+        if (_permission) {
+          location = await _locationService.getLocation();
+
+          _locationSubscription = _locationService.onLocationChanged().listen((LocationData result) async {
+            _currentCameraPosition = CameraPosition(
+                target: LatLng(result.latitude, result.longitude),
+                zoom: 16
+            );
+
+            final GoogleMapController controller = await _controller.future;
+            controller.animateCamera(CameraUpdate.newCameraPosition(_currentCameraPosition));
+
+            if(mounted){
+              setState(() {
+                _currentLocation = result;
+              });
+            }
+          });
+        }
+      } else {
+        bool serviceStatusResult = await _locationService.requestService();
+        print("Service status activated after request: $serviceStatusResult");
+        if(serviceStatusResult){
+          initPlatformState();
+        }
+      }
     } on PlatformException catch (e) {
-      if (e.code == 'PERMISSION_DENIED')
-        error = "Permission Denied";
-      else if (e.code == 'PERMISSION_DENIED_NEVER_ASK')
-        error =
-            "Permission Denied - Give the needed permission to get current location.";
-      my_location = null;
+      print(e);
+      if (e.code == 'PERMISSION_DENIED') {
+        error = e.message;
+      } else if (e.code == 'SERVICE_STATUS_ERROR') {
+        error = e.message;
+      }
+      location = null;
     }
 
     setState(() {
-      _currentLocation = my_location;
-      if(_currentLocation!=null)
-        _position =
-          CameraPosition(target: LatLng(_currentLocation['latitude'], _currentLocation['longitude']), zoom: 11.0);
+      _startLocation = location;
+    });
+
+  }
+
+  slowRefresh()async{
+    _locationSubscription.cancel();
+    await _locationService.changeSettings(accuracy: LocationAccuracy.BALANCED, interval: 10000);
+    _locationSubscription = _locationService.onLocationChanged().listen((LocationData result) {
+      if(mounted){
+        setState(() {
+          _currentLocation = result;
+        });
+      }
     });
   }
 
@@ -219,7 +269,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
   bool _indoorViewEnabled = true;
   bool _myLocationEnabled = true;
   bool _myLocationButtonEnabled = true;
-  GoogleMapController _controller;
+  GoogleMapController _gmapControler;
   bool _nightMode = false;
   bool _isWalking = false;
   bool _isDriving = false;
@@ -366,7 +416,8 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
   void _setMapStyle(String mapStyle) {
     setState(() {
       _nightMode = true;
-      _controller.setMapStyle(mapStyle);
+      if(_controller.isCompleted)
+        _gmapControler.setMapStyle(mapStyle);
     });
   }
 
@@ -461,7 +512,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
         if (_nightMode) {
           setState(() {
             _nightMode = false;
-            _controller.setMapStyle(null);
+            _gmapControler.setMapStyle(null);
           });
         } else {
           _getFileData('assets/night_mode.json').then(_setMapStyle);
@@ -474,7 +525,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
   Widget build(BuildContext context) {
     final GoogleMap gMap = GoogleMap(
       onMapCreated: onMapCreated,
-      initialCameraPosition: _kInitialPosition,
+      initialCameraPosition: _initialCamera,
       circles: Set<Circle>.of(circles.values),
       compassEnabled: _compassEnabled,
       cameraTargetBounds: _cameraTargetBounds,
@@ -523,7 +574,7 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
       columnChildren.add(Expanded(
         child: ListView(children: <Widget>[
           Text(
-              'Curreent location: ${_currentLocation['latitude']} , ${_currentLocation['longitude']}',
+              'Curreent location: ${_currentLocation.latitude} , ${_currentLocation.longitude}',
               style: TextStyle(fontSize: 18.0, color: Colors.blueAccent), textAlign: TextAlign.center),
           Text('Camaera bearing:  ${_position.bearing}'),
           Text('Camera Target: ${_position.target.latitude.toStringAsFixed(4)},'
@@ -564,8 +615,9 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
 
   void onMapCreated(GoogleMapController gMapController) {
     _addCircle();
+    _controller.complete(gMapController);
     setState(() {
-      _controller = gMapController;
+
       _isMapCreated = true;
     });
   }
@@ -574,15 +626,15 @@ class _PPOIConfigUIState extends State<PPOIConfigUI> {
     return LatLng(lat, lng);
   }
 
-  LatLng _createCenter() {
-    final double offset = _circleIDCounter.ceilToDouble();
-    if (_currentLocation == null) {
-      _currentLocation['latitude'] = 6.4444;
-      _currentLocation['longitude'] = 79.22;
-    }
-    return _createLatLng(
-        _currentLocation['latitude'], _currentLocation['longitude']);
-//    print("Current Location<><><>Latitude:"+_currentLocation['latitude'].toString()+"longitude"+_currentLocation['longitude'].toString());
-    return _createLatLng(6.9146, 79.9726);
-  }
+//  LatLng _createCenter() {
+//    final double offset = _circleIDCounter.ceilToDouble();
+//    if (_currentLocation == null) {
+//       6.4444;
+//      _currentLocation.longitude = 79.22;
+//    }
+//    return _createLatLng(
+//        _currentLocation.latitude, _currentLocation.longitude);
+////    print("Current Location<><><>Latitude:"+_currentLocation['latitude'].toString()+"longitude"+_currentLocation['longitude'].toString());
+//    return _createLatLng(6.9146, 79.9726);
+//  }
 }

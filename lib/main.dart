@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tourguru/screens/ar_views/ar_location_poi_ui.dart';
 //import 'package:map_view/map_view.dart';
 import 'package:tourguru/screens/mapbased_interface/homepage.dart';
 
@@ -29,7 +30,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(title: 'TourGuru-HomePage'),
+      home: 
+     HomePage(title: 'TourGuru-HomePage'),
+//      ARPOIView()
     );
   }
 }
