@@ -104,7 +104,7 @@ class _ARPlacementViewState extends State<ARPlacementView> with WidgetsBindingOb
   Future<void> onArchitectWidgetCreated() async {
 
 
-    this.architectWidget.load('assets/3dModelOnPlane/index.html', onLoadSuccess,  onLoadFailed);
+    this.architectWidget.load('assets/3d_Interactivity/index.html', onLoadSuccess,  onLoadFailed);
 
     //String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=6.9130779,79.9724734&radius=1500&key=AIzaSyBLcIpermU2uTd2ny81zbPVoWXNwQ8_6JU";
 

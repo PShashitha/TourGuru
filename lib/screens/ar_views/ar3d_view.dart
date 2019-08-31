@@ -18,6 +18,19 @@ class AR3DView extends StatefulWidget {
 
   final String title;
 
+
+
+
+
+//  This application runs on Google Play Services for AR (ARCore),
+// which is provided by Google LLC and governed by the Google Privacy Policy.
+
+
+
+
+
+
+
   @override
   _AR3DViewState createState() => _AR3DViewState();
 }
