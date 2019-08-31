@@ -90,6 +90,12 @@ flutter:
      - assets/3d_Interactivity/jquery/
      - assets/3d_Interactivity/jquery/images/
      - assets/3d_Interactivity/js/
+     - assets/BrowsingPois/
+     - assets/BrowsingPois/assets/
+     - assets/BrowsingPois/jquery/
+     - assets/BrowsingPois/jquery/images/
+     - assets/BrowsingPois/js/
+     - assets/BrowsingPois/css/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
