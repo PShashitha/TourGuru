@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tourguru/screens/ar_views/POI_List.dart';
 import 'package:tourguru/screens/ar_views/ar3d_view.dart';
 import 'package:tourguru/screens/ar_views/ar_location_poi_ui.dart';
 import 'package:tourguru/screens/audio_guidance_ui/audio_tourpage.dart';
@@ -158,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                            return AR3DView();
+                            return ARListView();
                           }));
                     }),
                 new ListTile(

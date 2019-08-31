@@ -74,6 +74,22 @@ flutter:
      - assets/PoiAtLocation/assets/
      - assets/PoiAtLocation/jquery/
      - assets/PoiAtLocation/js/
+     - assets/3dModelOnPlane/
+     - assets/3dModelOnPlane/css/
+     - assets/3dModelOnPlane/assets/
+     - assets/3dModelOnPlane/assets/buttons/
+     - assets/3dModelOnPlane/assets/models/
+     - assets/3dModelOnPlane/jquery/
+     - assets/3dModelOnPlane/jquery/images/
+     - assets/3dModelOnPlane/js/
+     - assets/3d_Interactivity/
+     - assets/3d_Interactivity/css/
+     - assets/3d_Interactivity/assets/
+     - assets/3d_Interactivity/assets/buttons/
+     - assets/3d_Interactivity/assets/models/
+     - assets/3d_Interactivity/jquery/
+     - assets/3d_Interactivity/jquery/images/
+     - assets/3d_Interactivity/js/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

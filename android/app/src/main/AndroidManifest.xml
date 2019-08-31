@@ -1,10 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cdap.tourguru">
 
+    <uses-sdk android:minSdkVersion="21" />
     <!-- The INTERNET permission is required for development. Specifically,
          flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
+
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -15,6 +17,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <uses-feature android:name="android.hardware.camera.ar" />
     <uses-feature android:name="android.hardware.camera" android:required="true" />
     <uses-feature android:name="android.hardware.location" android:required="true" />
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true" />
@@ -31,6 +34,12 @@
         android:name="io.flutter.app.FlutterApplication"
         android:label="tourguru"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- Indicates that the app supports, but does not require ARCore ("AR Optional").
+         Unlike "AR Required" apps, the Google Play Store will not automatically
+         download and install Google Play Services for AR when the app is installed.
+        -->
+        <meta-data android:name="com.google.ar.core" android:value="optional" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
