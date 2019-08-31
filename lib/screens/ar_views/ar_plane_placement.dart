@@ -13,16 +13,16 @@ import 'package:augmented_reality_plugin_wikitude/wikitude_response.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-class AR3DView extends StatefulWidget {
-  AR3DView({Key key, this.title}) : super(key: key);
+class ARPlacementView extends StatefulWidget {
+  ARPlacementView({Key key, this.title}) : super(key: key);
 
   final String title;
 
   @override
-  _AR3DViewState createState() => _AR3DViewState();
+  _ARPlacementViewState createState() => _ARPlacementViewState();
 }
 
-class _AR3DViewState extends State<AR3DView> with WidgetsBindingObserver{
+class _ARPlacementViewState extends State<ARPlacementView> with WidgetsBindingObserver{
 
   ArchitectWidget architectWidget;
 
@@ -64,7 +64,7 @@ class _AR3DViewState extends State<AR3DView> with WidgetsBindingObserver{
     );
 
 
-    this.architectWidget.setLocation(6.9130779, 79.9724734, 0, 0.1);
+    //this.architectWidget.setLocation(6.9130779, 79.9724734, 0, 0.1);
   }
 
   Future<WikitudeResponse> isFeatureSupported(List<String> features) async{
@@ -76,13 +76,13 @@ class _AR3DViewState extends State<AR3DView> with WidgetsBindingObserver{
     switch (state) {
       case AppLifecycleState.paused:
         if (this.architectWidget != null) {
-          this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
+          //this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
           this.architectWidget.pause();
         }
         break;
       case AppLifecycleState.resumed:
         if (this.architectWidget != null) {
-          this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
+         // this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
           this.architectWidget.resume();
         }
         break;
@@ -104,13 +104,13 @@ class _AR3DViewState extends State<AR3DView> with WidgetsBindingObserver{
   Future<void> onArchitectWidgetCreated() async {
 
 
-    this.architectWidget.load('assets/3dModelAtGeoLocation/index.html', onLoadSuccess,  onLoadFailed);
+    this.architectWidget.load('assets/3dModelOnPlane/index.html', onLoadSuccess,  onLoadFailed);
 
-    String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=6.9130779,79.9724734&radius=1500&key=AIzaSyBLcIpermU2uTd2ny81zbPVoWXNwQ8_6JU";
+    //String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=6.9130779,79.9724734&radius=1500&key=AIzaSyBLcIpermU2uTd2ny81zbPVoWXNwQ8_6JU";
 
 
 
-    this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
+    //this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
 
 
     this.architectWidget.resume();

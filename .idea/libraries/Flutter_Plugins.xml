@@ -2,10 +2,10 @@
   <library name="Flutter Plugins">
     <CLASSES>
       <root url="file://$PROJECT_DIR$/plugin/augmented_reality_plugin_wikitude" />
-      <root url="file://D:/Program Files/src/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-0.3.13" />
-      <root url="file://D:/Program Files/src/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_tts-0.5.2" />
-      <root url="file://D:/Program Files/src/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-0.5.20+6" />
-      <root url="file://D:/Program Files/src/flutter/.pub-cache/hosted/pub.dartlang.org/location-2.3.5" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_tts-0.5.2" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-0.3.13" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/google_maps_flutter-0.5.20+6" />
+      <root url="file://C:/src/flutter/.pub-cache/hosted/pub.dartlang.org/location-2.3.5" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

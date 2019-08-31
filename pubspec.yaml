@@ -66,14 +66,21 @@ flutter:
      - assets/3dModelAtGeoLocation/js/
      - assets/3dModelAtGeoLocation/css/
      - assets/3dModelAtGeoLocation/assets/
-     - assets/MultiplePois/
-     - assets/MultiplePois/assets/
-     - assets/MultiplePois/jquery/
-     - assets/MultiplePois/js/
-     - assets/PoiAtLocation/
-     - assets/PoiAtLocation/assets/
-     - assets/PoiAtLocation/jquery/
-     - assets/PoiAtLocation/js/
+     - assets/3dModelOnPlane/
+     - assets/3dModelOnPlane/assets/
+     - assets/3dModelOnPlane/assets/buttons/
+     - assets/3dModelOnPlane/assets/models/
+     - assets/3dModelOnPlane/jquery/
+     - assets/3dModelOnPlane/jquery/images/
+     - assets/3dModelOnPlane/js/
+     - assets/3dModelOnPlane/css/
+     - assets/BrowsingPois/
+     - assets/BrowsingPois/assets/
+     - assets/BrowsingPois/jquery/
+     - assets/BrowsingPois/jquery/images/
+     - assets/BrowsingPois/js/
+     - assets/BrowsingPois/css/
+     
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

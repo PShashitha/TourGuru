@@ -87,13 +87,13 @@ class _ARPOIViewState extends State<ARPOIView> with WidgetsBindingObserver{
     switch (state) {
       case AppLifecycleState.paused:
         if (this.architectWidget != null) {
-          this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
+//          this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
           this.architectWidget.pause();
         }
         break;
       case AppLifecycleState.resumed:
         if (this.architectWidget != null) {
-          this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
+//          this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
           this.architectWidget.resume();
         }
         break;
@@ -115,13 +115,13 @@ class _ARPOIViewState extends State<ARPOIView> with WidgetsBindingObserver{
   Future<void> onArchitectWidgetCreated() async {
 
 
-    this.architectWidget.load('assets/MultiplePois/index.html', onLoadSuccess,  onLoadFailed);
+    this.architectWidget.load('assets/BrowsingPois/index.html', onLoadSuccess,  onLoadFailed);
 
     String url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=6.9130779,79.9724734&radius=1500&key=AIzaSyBLcIpermU2uTd2ny81zbPVoWXNwQ8_6JU";
 
 
 
-    this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
+//    this.architectWidget.setLocation(6.9149771, 79.9785114, 100, 0.5);
 
 
     this.architectWidget.resume();
@@ -138,7 +138,7 @@ class _ARPOIViewState extends State<ARPOIView> with WidgetsBindingObserver{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-        title: Text("TourGuru AR 3D View"),
+        title: Text("POI AR Labeling View"),
     // Here we take the value from the MyHomePage object that was created by
     // the App.build method, and use it to set our appbar title.
     ),
